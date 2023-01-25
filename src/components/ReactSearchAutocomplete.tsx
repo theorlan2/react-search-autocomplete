@@ -34,6 +34,7 @@ export interface ReactSearchAutocompleteProps<T> {
   resultStringKeyName?: string
   inputSearchString?: string
   formatResult?: Function
+  notShowResultWithSearchString?: boolean
   showNoResults?: boolean
   showNoResultsText?: string
   showItemsOnFocus?: boolean
@@ -53,6 +54,7 @@ export default function ReactSearchAutocomplete<T>({
   showClear = true,
   maxResults = MAX_RESULTS,
   placeholder = '',
+  notShowResultWithSearchString = false,
   autoFocus = false,
   styling = {},
   resultStringKeyName = 'name',
@@ -79,9 +81,10 @@ export default function ReactSearchAutocomplete<T>({
 
   useEffect(() => {
     setSearchString(inputSearchString)
-    const timeoutId = setTimeout(() => setResults(fuseResults(inputSearchString)), 0)
-
-    return () => clearTimeout(timeoutId)
+    if(notShowResultWithSearchString){
+      const timeoutId = setTimeout(() => setResults(fuseResults(inputSearchString)), 0)
+      return () => clearTimeout(timeoutId)
+    }
   }, [inputSearchString])
 
   useEffect(() => {

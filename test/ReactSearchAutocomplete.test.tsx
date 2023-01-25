@@ -122,6 +122,33 @@ describe('<ReactSearchAutocomplete>', () => {
     expect(notDisplayedResults.length).toBe(0)
   })
 
+  
+
+  it('don`t display results if inputSearchString prop changes', async () => {
+    const { queryByPlaceholderText, queryAllByText } = render(
+      <ReactSearchAutocomplete<Item>
+        {...defaultProps}
+        notShowResultWithSearchString={false}
+        items={[...items, { id: 4, name: 'some other' }]}
+        inputSearchString="value0"
+      />
+    )
+
+    proceed()
+
+    expect(queryByPlaceholderText(/search/i)).toHaveValue('value0')
+
+    const results = queryAllByText('value0')
+
+    expect(results.length).toBe(0)
+
+    const notDisplayedResults = queryAllByText('some other')
+
+    expect(notDisplayedResults.length).toBe(0)
+  })
+
+
+
   it('updates results if items change', async () => {
     const { rerender } = render(
       <ReactSearchAutocomplete<Item> {...defaultProps} onSearch={onSearch} />
